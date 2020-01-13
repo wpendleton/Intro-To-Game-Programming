@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Intro To Game Programming Day 1</title>
+    <style>
+        .cool {
+            font-size: 70px;
+            color: orange;
+        }
+
+        button {
+            padding: 50px;
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cool">
+        Welcome to Tic-Tac-Toe
+    </div>
+    <div id="main">
+    </div>
+    <script>
+        function buttonTrigger(x, y) {
+            console.log(x + " " + y);
+        }
+        function boot() {
+            let main = document.querySelector("#main");
+            for (let y = 0; y < 3; y++) {
+                let div = document.createElement("div");
+                main.appendChild(div)
+                for (let x = 0; x < 3; x++) {
+                    let button = document.createElement("button");
+                    button.id = "" + x + y;
+                    button.innerText = "?";
+                    button.addEventListener("click", () => buttonTrigger(x, y));
+                    div.appendChild(button);
+                }
+            }
+        }
+        boot();
+    </script>
+</body>
+
+</html>
