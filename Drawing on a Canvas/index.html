@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Colors on a Canvas</title>
+    <link href="https://fonts.googleapis.com/css?family=Gelasio&display=swap" rel="stylesheet">
+    <style>
+        .content{
+            max-width:500px;
+            margin:auto;
+        }
+
+        body{
+            padding-bottom:2em;
+            font-family: 'Gelasio', serif;
+        }        
+
+        table,
+        tr,
+        td, th {
+            border: solid black 1px;
+            border-collapse: collapse;
+            padding: .5em;
+        }
+
+        th{
+            background-color:lightgray;
+        }
+
+        div{
+            padding-bottom:.5em;
+            padding-top:.5em;
+        }
+
+        img {
+            width: 500px;
+        }
+
+        .title {
+            font-size: 2em;
+            padding-top:1em;
+            font-variant: small-caps;
+            
+        }
+
+        .header:before{
+            content: " ";
+            display: block;
+            border-top: 1px solid black;
+            padding-bottom: 1em;
+        }
+
+        .header {
+            font-size: 1.5em;
+            padding-top:2em;
+           
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="title">
+            Three ways to draw a game on a web page.
+        </div>
+        <div>
+            <div class="header">
+                Box Model (HTML)
+            </div>
+            <div>
+                <img src="NYTimes.jpg" />
+                <div>By Charles Ransom Miller - New York Times, Public Domain,
+                    https://commons.wikimedia.org/w/index.php?curid=38072749</div>
+            </div>
+        </div>
+        <div>
+            <div class="header">
+                Vector-Based (SVG)
+            </div>
+            <div>
+                Example (from W3Schools)
+            </div>
+            <div>
+                <svg height="150" width="500">
+                    <ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple" />
+                    <ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime" />
+                    <ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow" />
+                    Sorry, your browser does not support inline SVG.
+                </svg>
+            </div>
+            <div>
+                <a href="https://www.w3schools.com/graphics/svg_intro.asp"> Learn more</a>
+            </div>
+        </div>
+        <div>
+            <div class="header">
+                Canvas-Based (Pixel)
+            </div>
+            <div>
+                <a href="https://www.w3schools.com/graphics/canvas_intro.asp">Learn More</a>
+            </div>
+
+        </div>
+        <div >
+            <div class="header">Summary</div>
+            <div>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>Plain HTML</th>
+                        <th>Support Vector Graphics</th>
+                        <th>Canvas</th>
+                    </tr>
+                    <tr>
+                        <td>Game Use</td>
+                        <td>Infrequent</td>
+                        <td>Less Frequent</td>
+                        <td>Frequent</td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>Box Model</td>
+                        <td>Vector-Based</td>
+                        <td>Pixel-Based</td>
+                    </tr>
+                    <tr>
+                        <td>Persistence</td>
+                        <td>Persistent</td>
+                        <td>Persistent</td>
+                        <td>Not Persistent</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Practice</title>
+</head>
+
+<body>
+    <canvas id="canv" width="640px" height="480px"></canvas>
+    <script>
+        function draw() {
+            let canv = document.querySelector("#canv");
+            let ctx = canv.getContext("2d");
+
+            ctx.save();
+            ctx.translate(320,20);
+            ctx.scale(.5,.5);
+            ctx.strokeStyle = "purple";
+            ctx.fillStyle = "orange";
+            ctx.fillRect(0,0,100,100);
+            ctx.strokeRect(0,0,100,100);
+            ctx.restore();
+
+            ctx.save();
+            ctx.translate(0,20);
+            ctx.scale(.5,.5);
+            ctx.strokeStyle = "purple";
+            ctx.fillStyle = "orange";
+            ctx.fillRect(0,0,100,100);
+            ctx.strokeRect(0,0,100,100);
+            ctx.restore();
+
+        }
+
+        draw();
+    </script>
+</body>
+
+</html>
