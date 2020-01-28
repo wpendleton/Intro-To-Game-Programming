@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sprint 1</title>
+    <style>
+        canvas {
+            background-color: Aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canv" width="640px" height="480px">
+
+    </canvas>
+    <script>
+        cw = 640;
+        ch = 480;
+        gravity = 10;
+        let gameObjects = [];
+        cnv = document.querySelector("#canv");
+        ctx = cnv.getContext("2d");
+        function start() {
+            let crate = { x: "100", y: "100", w: "50", h: "50", shape: "square", color: "brown", physics: "true", velx: "0", vely: "0", grounded: "0", weight: "50" };
+            gameObjects.push(crate);
+            setInterval(update, 40);
+        }
+        function update() {
+            ctx.fillStyle = "Aqua";
+            ctx.fillRect(0, 0, cw, ch);
+            gameObjects.forEach(physics);
+            gameObjects.forEach(render);
+        }
+        function physics(object) {
+            if (!isGrounded(object)) {
+                object.vely = +object.vely + gravity;
+                if (object.vely > getTerminalVelocity(object)) {
+                    object.vely = getTerminalVelocity(object);
+                }
+                object.y = +object.y + +object.vely;
+            }
+            if (isGrounded(object)) {
+                object.y = ch - object.h / 2;
+                object.vely = 0;
+            }
+        }
+        function isGrounded(object) {
+            return +object.y + +object.h / 2 >= ch;
+        }
+        function getTerminalVelocity(object) {
+            return 240 * Math.sqrt(object.weight / object.w);
+        }
+        function render(object) {
+            switch (object.shape) {
+                case "square":
+                    drawSquare(object.x, object.y, object.w, object.h, object.color);
+                    break;
+                default:
+            }
+        }
+        function drawSquare(x, y, w, h, color) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = "black";
+            ctx.fillRect(x - w / 2, y - h / 2, w, h)
+            ctx.strokeRect(x - w / 2, y - h / 2, w, h)
+        }
+        function moveBox(event){
+            gameObjects[0].x = event.clientX;
+            gameObjects[0].y = event.clientY;
+        }
+        cnv.addEventListener("click", moveBox);
+        start();
+    </script>
+
+</body>
+
+</html>
