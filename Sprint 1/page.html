@@ -16,41 +16,63 @@
 
     </canvas>
     <script>
-        cw = 640;
-        ch = 480;
-        gravity = 10;
+        let cw = 640;
+        let ch = 480;
+
+        let gravity = 3;
+        let framerate = 60;
+        let drag = 25;
+        let movespeed = 3;
+        let accel = 2;
+
         let gameObjects = [];
-        cnv = document.querySelector("#canv");
-        ctx = cnv.getContext("2d");
+        let cnv = document.querySelector("#canv");
+        let ctx = cnv.getContext("2d");
+
+        let gaccel = gravity * 50 / framerate;
+        let frametime = 1000 / framerate;
+        let dragmodifier = 1000 / drag;
+        movespeed = movespeed * 5;
+        accel = movespeed / 10 * accel;
+
+        let keypresses = ["false", "false", "false", "false"];
+
         function start() {
-            let crate = { x: "100", y: "100", w: "50", h: "50", shape: "square", color: "brown", physics: "true", velx: "0", vely: "0", grounded: "0", weight: "50" };
+            let crate = { name: "crate", x: "100", y: "100", w: "50", h: "50", shape: "square", color: "brown", physics: "true", velx: "0", vely: "0", weight: "50", player: "false" };
+            let player = { name: "player", x: "100", y: "100", w: "25", h: "25", shape: "square", color: "green", physics: "true", velx: "0", vely: "0", weight: "20", player: "true" };
+            let player2 = { name: "player2", x: "200", y: "100", w: "100", h: "100", shape: "square", color: "purple", physics: "true", velx: "0", vely: "0", weight: "100", player: "true" };
             gameObjects.push(crate);
-            setInterval(update, 40);
+            gameObjects.push(player);
+            gameObjects.push(player2);
+            setInterval(update, frametime);
         }
         function update() {
             ctx.fillStyle = "Aqua";
             ctx.fillRect(0, 0, cw, ch);
             gameObjects.forEach(physics);
             gameObjects.forEach(render);
+            gameObjects.forEach(control);
         }
         function physics(object) {
-            if (!isGrounded(object)) {
-                object.vely = +object.vely + gravity;
+            if (object.physics == "false") {
+                return;
+            }
+                object.vely = +object.vely + gaccel;
                 if (object.vely > getTerminalVelocity(object)) {
                     object.vely = getTerminalVelocity(object);
                 }
                 object.y = +object.y + +object.vely;
-            }
             if (isGrounded(object)) {
                 object.y = ch - object.h / 2;
                 object.vely = 0;
             }
+            object.x = +object.x + +object.velx;
         }
         function isGrounded(object) {
             return +object.y + +object.h / 2 >= ch;
         }
         function getTerminalVelocity(object) {
-            return 240 * Math.sqrt(object.weight / object.w);
+            return dragmodifier * Math.sqrt(object.weight / object.w);
         }
         function render(object) {
             switch (object.shape) {
@@ -66,11 +88,84 @@
             ctx.fillRect(x - w / 2, y - h / 2, w, h)
             ctx.strokeRect(x - w / 2, y - h / 2, w, h)
         }
-        function moveBox(event){
+        function control(object){
+            if (object.player == "false"){
+                return;
+            }
+            if (keypresses[0] == "true"){
+                object.velx = +object.velx - +accel;
+                if (object.velx < -1 * movespeed){
+                    object.velx = -1 * movespeed;
+                }
+            }
+            if (keypresses[1] == "true"){
+                object.velx = +object.velx + +accel;
+                if (object.velx > movespeed){
+                    object.velx = movespeed;
+                }
+            }
+            if (keypresses[1] == "false" && keypresses[0] == "false"){
+                if (object.velx < 0){
+                    object.velx = +object.velx + +accel;
+                    if (object.velx > 0){
+                        object.velx = 0;
+                    }
+                }
+                if (object.velx > 0){
+                    object.velx = +object.velx - +accel;
+                    if (object.velx < 0){
+                        object.velx = 0;
+                    }
+                }
+            }
+            if (keypresses[2] == "true" && isGrounded(object)){
+                object.vely = -1 * getTerminalVelocity(object);
+            }
+            if (keypresses[3] == "true"){
+                object.vely = +object.vely + +gaccel;
+            }
+        }
+        function moveBox(event) {
             gameObjects[0].x = event.clientX;
             gameObjects[0].y = event.clientY;
         }
+        function keyPressed(event) {
+            switch (event.key) {
+                case "ArrowLeft":
+                    keypresses[0] = "true";
+                    break;
+                case "ArrowRight":
+                    keypresses[1] = "true";
+                    break;
+                case "ArrowUp":
+                    keypresses[2] = "true";
+                    break;
+                case "ArrowDown":
+                    keypresses[3] = "true";
+                    break;
+                default:
+            }
+        }
+        function keyReleased(event) {
+            switch (event.key) {
+                case "ArrowLeft":
+                    keypresses[0] = "false";
+                    break;
+                case "ArrowRight":
+                    keypresses[1] = "false";
+                    break;
+                case "ArrowUp":
+                    keypresses[2] = "false";
+                    break;
+                case "ArrowDown":
+                    keypresses[3] = "false";
+                    break;
+                default:
+            }
+        }
         cnv.addEventListener("click", moveBox);
+        document.addEventListener("keydown", keyPressed);
+        document.addEventListener("keyup", keyReleased);
         start();
     </script>
 
