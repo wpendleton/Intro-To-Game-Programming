@@ -40,7 +40,7 @@
         function start() {
             let crate = { name: "crate", x: "100", y: "100", w: "50", h: "50", shape: "square", color: "brown", physics: "true", velx: "0", vely: "0", weight: "50", player: "false" };
             let player = { name: "player", x: "100", y: "100", w: "25", h: "25", shape: "square", color: "green", physics: "true", velx: "0", vely: "0", weight: "20", player: "true" };
-            let player2 = { name: "player2", x: "200", y: "100", w: "100", h: "100", shape: "square", color: "purple", physics: "true", velx: "0", vely: "0", weight: "100", player: "true" };
+            let player2 = { name: "player2", x: "200", y: "100", w: "100", h: "100", shape: "square", color: "purple", physics: "false", velx: "0", vely: "0", weight: "100", player: "false" };
             gameObjects.push(crate);
             gameObjects.push(player);
             gameObjects.push(player2);
@@ -50,8 +50,8 @@
             ctx.fillStyle = "Aqua";
             ctx.fillRect(0, 0, cw, ch);
             gameObjects.forEach(physics);
-            gameObjects.forEach(render);
             gameObjects.forEach(control);
+            gameObjects.forEach(render);
         }
         function physics(object) {
             if (object.physics == "false") {
