@@ -1,0 +1,5 @@
+----- Types of Objects in Game Programming -----
+	Scene			Different screens/states
+	Game Objects	Things that can appear in the game
+	Components		Different properties game objects can have that modify how they work
+	Behaviors		Actual 'Game Code' that describes how objects interact in the game engine
