@@ -128,6 +128,7 @@
         function moveBox(event) {
             gameObjects[0].x = event.clientX;
             gameObjects[0].y = event.clientY;
+            gameObjects[0].vely = 0;
         }
         function keyPressed(event) {
             switch (event.key) {
