@@ -1,6 +1,6 @@
 import Behavior from "./Behavior.js"
 
-class RectangleBehavior extends Behavior {
+class RotateBehavior extends Behavior {
     speed;
 
     constructor(speed) {
@@ -17,4 +17,4 @@ class RectangleBehavior extends Behavior {
     }
 }
 
-export default RectangleBehavior;
+export default RotateBehavior;
