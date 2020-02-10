@@ -41,6 +41,15 @@ class GameObject {
             }
         }
     }
+    getComponent(type){
+        for(let i = 0; i < this.components.length; i++){
+            let component = this.components[i];
+            if (component instanceof type){
+                return component;
+            }
+        }
+        throw "Error: Couldn't find type " + type;
+    }
 }
 
 export default GameObject;
