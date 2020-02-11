@@ -6,6 +6,7 @@ class RectangleComponent extends Component{
     height;
     fill;
     stroke;
+    highlight;
 
     constructor(width, height, fill, stroke){
         super();
@@ -13,6 +14,7 @@ class RectangleComponent extends Component{
         this.height = height;
         this.fill = fill;
         this.stroke = stroke;
+        this.highlight = false;
     }
     draw(ctx){
         /* draw a rectangle centered about 0,0 */
@@ -22,6 +24,10 @@ class RectangleComponent extends Component{
             ctx.fillStyle = this.fill;
             ctx.strokeStyle = this.stroke;
             ctx.fillRect(0,0,this.width,this.height);
+            if (this.highlight){
+                ctx.fillStyle = "white";
+                ctx.fillRect(0,0,this.width,this.height);
+            }
             ctx.strokeRect(0,0,this.width,this.height);
         }
         ctx.restore();
