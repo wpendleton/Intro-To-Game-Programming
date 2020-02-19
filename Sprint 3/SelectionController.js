@@ -1,67 +1,62 @@
 import Behavior from "./Behavior.js";
 
-class SelectionController extends Behavior{
+class SelectionController extends Behavior {
     source;
     move;
     attack;
-    start(){
+    constructor() {
+        super();
         this.source = null;
         this.move = null;
         this.attack = null;
     }
-    update(){
-
-    }
-    selectSource(tile){
+    start() { }
+    update() { }
+    selectSource(tile) {
         this.source = tile;
         this.source.rectangle.lowlight = true;
     }
-    selectMove(tile){
+
+    selectMove(tile) {
         this.move = tile;
         this.move.rectangle.lowlight = true;
     }
-    selectAttack(tile){
+
+    selectAttack(tile) {
         this.attack = tile;
         this.attack.rectangle.lowlight = true;
-        //this.sendMove(); //TODO: move this call to a "Confirm" button
     }
-    deselectSource(){
-        if (this.attack){
-            this.attack.rectangle.lowlight = false;
-            this.attack = null;
-        }
-        if(this.move){
-            this.move.rectangle.lowlight = false;
-            this.move = null;
-        }
-        if(this.source){
+
+    deselectSource() {
+        this.deselectMove();
+        if (this.source) {
             this.source.rectangle.lowlight = false;
             this.source = null;
         }
     }
-    deselectMove(){
-        if (this.attack){
-            this.attack.rectangle.lowlight = false;
-            this.attack = null;
-        }
-        if(this.move){
+
+    deselectMove() {
+        this.deselectAttack();
+        if (this.move) {
             this.move.rectangle.lowlight = false;
             this.move = null;
         }
     }
-    deselectAttack(){
-        if (this.attack){
+
+    deselectAttack() {
+        if (this.attack) {
             this.attack.rectangle.lowlight = false;
             this.attack = null;
         }
     }
-    sendMove(){
-        this.source.rectangle.lowlight = false;
-        this.move.rectangle.lowlight = false;
-        this.attack.rectangle.lowlight = false;
-        this.source = null;
-        this.move = null;
-        this.attack = null;
+
+    sendMove() {
+        if (this.source && this.move) {
+            this.move.setUnit(this.source.unit);
+            this.source.unit.setTile(this.move.x, this.move.y);
+            this.source.setUnit(null);
+            this.deselectSource(); //TODO implement this functionality;
+        }
     }
 }
 
