@@ -108,6 +108,10 @@ class TileBehavior extends Behavior {
     setUnit(unit) {
         this.board.setUnit(this.x, this.y, unit);
     }
+
+    getUnit(){
+        this.board.getUnit(this.x, this.y);
+    }
 }
 
 export default TileBehavior;

@@ -75,6 +75,7 @@ class GameObject {
         }
         throw "Error: Couldn't find type " + type;
     }
+    delete(){}
 }
 
 export default GameObject;

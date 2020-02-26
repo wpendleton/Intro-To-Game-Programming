@@ -55,8 +55,12 @@ class SelectionController extends Behavior {
             this.move.setUnit(this.source.unit);
             this.source.unit.setTile(this.move.x, this.move.y);
             this.source.setUnit(null);
-            this.deselectSource(); //TODO implement this functionality;
         }
+        if (this.source && this.attack){
+            let unit = this.attack.getUnit().gameObject;
+
+        }
+        this.deselectSource();
     }
 }
 
