@@ -17,6 +17,8 @@ export default class Input{
     //Mouse handling members
     //---------------------------------------------------
 
+    static mouseX = -100;
+    static mouseY = -100;
 
     static mouseButtons = []; //What is the current State of the each button?
 
@@ -64,7 +66,16 @@ export default class Input{
     //Mouse handling functions
     //---------------------------------------------------
 
+    //Where is the mouse in X?
+    static getMouseX(){
+        return this.mouseX;
+    }
 
+    //Where is the mouse in Y?
+    static getMouseY(){
+        return this.mouseY;
+    }
+    
     //Did the mouse button come up this frame?
     static getMouseButtonUp(button){
         return this.frameMouseButtonsUp[button];
@@ -79,6 +90,5 @@ export default class Input{
     static getMouseButton(button){
         return this.mouseButtons[button];
     }
-
     
 }

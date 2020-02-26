@@ -1,8 +1,7 @@
-import Behavior from "./Behavior.js"
-import RectangleComponent from "./engine/components/RectangleComponent.js/index.js"
+import Engine from "../../engine/Engine.js"
 import BoardController from "./BoardController.js";
 
-class UnitBehavior extends Behavior {
+class UnitBehavior extends Engine.Base.Behavior {
     x;
     y;
     type;
@@ -18,7 +17,7 @@ class UnitBehavior extends Behavior {
         this.friendly = friendly;
     }
     start() {
-        this.rectangle = this.gameObject.getComponent(RectangleComponent);
+        this.rectangle = this.gameObject.getComponent(Engine.Components.RectangleComponent);
         this.board = this.gameObject.getComponent(BoardController);
         this.board.setUnit(this.x, this.y, this);
         this.tile = this.board.getTile(this.x, this.y);

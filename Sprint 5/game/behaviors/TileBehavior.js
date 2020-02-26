@@ -1,6 +1,6 @@
 import Engine from "../../engine/Engine.js"
-import SelectionController from "../behaviors/SelectionController.js";
-import BoardController from "../behaviors/BoardController.js";
+import SelectionController from "./SelectionController.js";
+import BoardController from "./BoardController.js";
 
 class TileBehavior extends Engine.Base.Behavior {
     rectangle;
@@ -19,7 +19,7 @@ class TileBehavior extends Engine.Base.Behavior {
         this.type = type;
     }
     start() {
-        this.rectangle = this.gameObject.getComponent(RectangleComponent);
+        this.rectangle = this.gameObject.getComponent(Engine.Components.RectangleComponent);
         this.selector = this.gameObject.getComponent(SelectionController);
         this.board = this.gameObject.getComponent(BoardController);
         this.board.setTile(this.x, this.y, this);
@@ -31,43 +31,38 @@ class TileBehavior extends Engine.Base.Behavior {
     }
 
     update() {
-    }
+        let mouseX = Engine.Base.Input.getMouseX();
+        let mouseY = Engine.Base.Input.getMouseY();
+        let clicked = Engine.Base.Input.getMouseButtonUp(0);
 
-    mousePosition(event) {
-        if (this.inBounds(event)) {
+        if (this.inBounds(mouseX, mouseY)){
             this.rectangle.highlight = true;
+            if (clicked){
+                this.controller.sendMove;
+            }
         }
         else {
             this.rectangle.highlight = false;
         }
     }
 
-    mouseClicked(event) {
-        if (this.inBounds(event)) {
-            this.selector.selectionHandler(this);
-        }
-    }
     getFill(type) {
         switch (type) {
             case "M":
                 return "sienna";
-                break;
             case "P":
                 return "limegreen";
-                break;
             case "W":
                 return "mediumblue";
-                break;
             case "F":
                 return "darkgreen";
-                break;
             default:
                 return "black";
         }
     }
 
-    inBounds(event) {
-        return (event.offsetX > this.gameObject.x - this.rectangle.width / 2 && event.offsetX < this.gameObject.x + this.rectangle.width / 2 && event.offsetY > this.gameObject.y - this.rectangle.height / 2 && event.offsetY < this.gameObject.y + this.rectangle.height / 2);
+    inBounds(x, y) {
+        return (x > this.gameObject.x - this.rectangle.width / 2 && x < this.gameObject.x + this.rectangle.width / 2 && y > this.gameObject.y - this.rectangle.height / 2 && y < this.gameObject.y + this.rectangle.height / 2);
     }
 
     setUnit(unit) {

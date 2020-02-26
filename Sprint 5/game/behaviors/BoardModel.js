@@ -1,16 +1,18 @@
 import Engine from "../../engine/Engine.js"
-import TileBehavior from "./TileBehavior.js"
-import UnitBehavior from "./UnitBehavior.js";
 
-class BoardController extends Engine.Base.Behavior {
+class BoardModel extends Engine.Base.Behavior {
     map;
+    unitMap;
     constructor(width, height) {
         super();
         let map = new Array(width);
+        let unitMap = new Array(width);
         for (let i = 0; i < width; i++) {
             map[i] = new Array(height);
+            unitMap[i] = new Array(height);
         }
         this.map = map;
+        this.unitMap = unitMap;
     }
     start() { }
     update() { }
@@ -21,14 +23,11 @@ class BoardController extends Engine.Base.Behavior {
         this.map[x][y] = tile;
     }
     getUnit(x, y) {
-        return this.map[x][y].unit;
+        return this.unitMap[x][y];
     }
     setUnit(x, y, unit) {
-        this.map[x][y].unit = unit;
-        if (unit) {
-            unit.tile = this.getTile(x, y);
-        }
+        this.unitMap[x][y] = unit;
     }
 }
 
-export default BoardController;
+export default BoardModel;

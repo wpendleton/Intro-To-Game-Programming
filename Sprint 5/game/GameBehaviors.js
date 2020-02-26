@@ -1,13 +1,12 @@
-import CircleBehavior from "./behaviors/CircleBehavior.js";
-import RectangleBehavior from "./behaviors/RectangleBehavior.js";
-import TextBehavior from "./behaviors/TextBehavior.js";
-import StartSceneInputListener from "./behaviors/StartSceneInputListener.js"
-import CountDownTimer from "./behaviors/CountDownTimer.js"
-
+import BoardController from "./behaviors/BoardController.js";
+import ConfirmButtonBehavior from "./behaviors/ConfirmButtonBehavior.js";
+import SelectionController from "./behaviors/SelectionController.js";
+import TileBehavior from "./behaviors/TileBehavior.js";
+import UnitBehavior from "./behaviors/UnitBehavior.js";
 export default{
-  CircleBehavior,
-  RectangleBehavior,
-  TextBehavior,
-  StartSceneInputListener,
-  CountDownTimer,
+  BoardController,
+  ConfirmButtonBehavior,
+  SelectionController,
+  TileBehavior,
+  UnitBehavior,
 }

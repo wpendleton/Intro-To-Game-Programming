@@ -2,8 +2,9 @@ import Engine from "../../engine/Engine.js";
 import GameObjects from "../GameObjects.js";
 
 export default class BattleScene extends Engine.Base.Scene {
-    constructor() {
+    constructor(width, height) {
         super("BattleScene");
+        
         let mapFile = new XMLHttpRequest();
         mapFile.open("GET", "./game/data/map.csv", false);
         mapFile.send(null);
@@ -12,26 +13,8 @@ export default class BattleScene extends Engine.Base.Scene {
         for (let i = 0; i < mapRows.length; i++) {
             map.push(mapRows[i].split(','));
         }
-        let maph = map.length;
-        let mapw = map[0].length;
-        let mapsw = canv.width * 3 / 4;
-        let mapsh = canv.height * 3 / 4;
-        let tilew = mapsw / mapw;
-        let tileh = mapsh / maph;
 
-        let sc = new SelectionController();
-        let bc = new BoardController(mapw, maph);
-
-        for (let y = 0; y < maph; y++) {
-            for (let x = 0; x < mapw; x++) {
-                let tile = new GameObject(0, 0, 1, 1, 0);
-                tile.addComponent(sc);
-                tile.addComponent(bc);
-                tile.addComponent(new RectangleComponent(tilew, tileh, "white", "black"));
-                tile.addComponent(new TileBehavior(x, y, map[y][x]));
-                this.children.push(tile);
-            }
-        }
+        let board = new GameObjects.Board(map, width, height);
 
         let unitSize = Math.min(tilew, tileh) * 0.8;
         let unitFile = new XMLHttpRequest();

@@ -1,4 +1,4 @@
-import Engine from "../../engine/Engine.js";
+import Engine from "../../engine/Engine.js"
 
 class SelectionController extends Engine.Base.Behavior {
     source;

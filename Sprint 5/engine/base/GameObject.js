@@ -14,6 +14,9 @@ export default class GameObject extends NameableParent {
     addComponent(component) {
         this.components.push(component);
         component.gameObject = this;
+        if (component.start){
+            component.start();
+        }
     }
     draw(ctx) {
         ctx.save();
