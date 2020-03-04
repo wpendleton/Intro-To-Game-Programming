@@ -38,7 +38,7 @@ class TileBehavior extends Engine.Base.Behavior {
         if (this.inBounds(mouseX, mouseY)){
             this.rectangle.highlight = true;
             if (clicked){
-                this.controller.sendMove;
+                this.selector.selectionHandler(this);
             }
         }
         else {

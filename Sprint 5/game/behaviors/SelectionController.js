@@ -1,4 +1,5 @@
 import Engine from "../../engine/Engine.js"
+import SceneManager from "../SceneManager.js"
 
 class SelectionController extends Engine.Base.Behavior {
     source;
@@ -110,12 +111,10 @@ class SelectionController extends Engine.Base.Behavior {
             this.source.setUnit(null);
             this.move.setUnit(unit);
             this.move.unit.setTile(this.move.x, this.move.y);
-
         }
         if (this.source && this.attack) {
-
             let unit = this.attack.getUnit();
-            unit.gameObject.delete(); //TODO: Apply damage instead
+            SceneManager.currentScene.deleteObject(unit); //TODO: Apply damage instead
             this.attack.setUnit(null);
         }
         this.deselectSource();

@@ -16,4 +16,7 @@ export default class Scene extends NameableParent{
     update(){
         this.children.filter(i=>i.update).forEach(i=>i.update());
     }
+    deleteObject(obj){
+        this.children.splice(this.children.indexOf(obj), 1);
+    }
 }

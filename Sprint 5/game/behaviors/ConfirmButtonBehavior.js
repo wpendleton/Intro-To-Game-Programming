@@ -18,7 +18,7 @@ class ConfirmButtonBehavior extends Engine.Base.Behavior {
         if (this.inBounds(mouseX, mouseY)){
             this.rectangle.highlight = true;
             if (clicked){
-                this.controller.sendMove;
+                this.controller.sendMove();
             }
         }
         else {
@@ -27,7 +27,7 @@ class ConfirmButtonBehavior extends Engine.Base.Behavior {
     }
 
     inBounds(x, y) {
-        return (x > this.gameObject.x - this.rectangle.width / 2 && x < this.gameObject.x + this.rectangle.width / 2 && y > this.gameObject.y - this.rectangle.height / 2 && y < this.gameObject.y + this.rectangle.height / 2);
+        return(x > this.gameObject.x - this.rectangle.width / 2 && x < this.gameObject.x + this.rectangle.width / 2 && y > this.gameObject.y - this.rectangle.height / 2 && y < this.gameObject.y + this.rectangle.height / 2);
     }
 }
 
