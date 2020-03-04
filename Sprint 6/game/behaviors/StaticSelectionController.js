@@ -1,19 +1,12 @@
 import Engine from "../../engine/Engine.js"
 import SceneManager from "../SceneManager.js"
 
-class SelectionController extends Engine.Base.Behavior {
-    source;
-    move;
-    attack;
-    constructor() {
-        super();
-        this.source = null;
-        this.move = null;
-        this.attack = null;
-    }
-    start() { }
-    update() { }
-    selectionHandler(tile) {
+export default class StaticSelectionController extends Engine.Base.Behavior {
+    static source = null;
+    static move = null;
+    static attack = null;
+
+    static selectionHandler(tile) {
         if (tile == this.source) {
             this.deselectSource();
             return;
@@ -36,8 +29,9 @@ class SelectionController extends Engine.Base.Behavior {
             return;
         }
         if (this.move) {
-            if (tile.unit) {
-                if (tile.unit.friendly == 0) {
+            let unit = tile.getUnit();
+            if (unit) {
+                if (unit.friendly == 0) {
                     //TODO : Verify Attack Range
                     this.selectAttack(tile);
                 }
@@ -45,8 +39,9 @@ class SelectionController extends Engine.Base.Behavior {
             return;
         }
         if (this.source) {
-            if (tile.unit) {
-                if (tile.unit.friendly == 0) {
+            let unit = tile.getUnit();
+            if (unit) {
+                if (unit.friendly == 0) {
                     //TODO: Verify Attack Range;
                     this.selectMove(this.source);
                     this.selectAttack(tile);
@@ -58,29 +53,30 @@ class SelectionController extends Engine.Base.Behavior {
 
             return;
         }
-        if (tile.unit) {
-            if (tile.unit.friendly == 1) {
+        let unit = tile.getUnit();
+        if (unit) {
+            if (unit.friendly == 1) {
                 this.selectSource(tile);
             }
         }
 
     }
-    selectSource(tile) {
+    static selectSource(tile) {
         this.source = tile;
         this.source.rectangle.lowlight = true;
     }
 
-    selectMove(tile) {
+    static selectMove(tile) {
         this.move = tile;
         this.move.rectangle.lowlight = true;
     }
 
-    selectAttack(tile) {
+    static selectAttack(tile) {
         this.attack = tile;
         this.attack.rectangle.lowlight = true;
     }
 
-    deselectSource() {
+    static deselectSource() {
         this.deselectMove();
         if (this.source) {
             this.source.rectangle.lowlight = false;
@@ -88,7 +84,7 @@ class SelectionController extends Engine.Base.Behavior {
         }
     }
 
-    deselectMove() {
+    static deselectMove() {
         this.deselectAttack();
         if (this.move) {
             if (this.move != this.source){
@@ -98,27 +94,25 @@ class SelectionController extends Engine.Base.Behavior {
         }
     }
 
-    deselectAttack() {
+    static deselectAttack() {
         if (this.attack) {
             this.attack.rectangle.lowlight = false;
             this.attack = null;
         }
     }
 
-    sendMove() {
+    static sendMove() {
         if (this.source && this.move) {
             let unit = this.source.getUnit();
-            this.source.setUnit(null);
-            this.move.setUnit(unit);
-            this.move.unit.setTile(this.move.x, this.move.y);
+            this.source.setUnit(null);//TODO: fix this
+            this.move.setUnit(unit);//this
+            this.move.unit.setTile(this.move.x, this.move.y);//this
         }
         if (this.source && this.attack) {
             let unit = this.attack.getUnit();
             SceneManager.currentScene.deleteObject(unit.gameObject); //TODO: Apply damage instead
-            this.attack.setUnit(null);
+            this.attack.setUnit(null);//TODO fix this
         }
         this.deselectSource();
     }
 }
-
-export default SelectionController;
