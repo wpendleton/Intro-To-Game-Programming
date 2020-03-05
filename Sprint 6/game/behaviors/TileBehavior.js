@@ -3,6 +3,15 @@ import StaticSelectionController from "./StaticSelectionController.js";
 
 class TileBehavior extends Engine.Base.Behavior {
     rectangle;
+    x;
+    y;
+    type;
+    constructor(x, y, type){
+        super();
+        this.x = x;
+        this.y = y;
+        this.type = type;
+    }
     start() {
         this.rectangle = this.gameObject.getComponent(Engine.Components.RectangleComponent);
     }

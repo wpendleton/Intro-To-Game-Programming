@@ -9,17 +9,9 @@ export default class Scene extends NameableParent{
     draw(ctx, width, height){
         ctx.fillStyle = "white";
         ctx.fillRect(0,0,width, height)
-        
         this.children.filter(i=>i.draw).forEach(i=>i.draw(ctx));
-
     }
     update(){
         this.children.filter(i=>i.update).forEach(i=>i.update());
-    }
-    deleteObject(gameObject){
-        console.log(gameObject);
-        let index = this.children.indexOf(gameObject);
-        console.log(index);
-        this.children.splice(index, 1);
     }
 }

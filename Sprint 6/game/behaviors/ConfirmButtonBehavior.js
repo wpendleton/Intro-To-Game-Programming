@@ -1,13 +1,11 @@
 import Engine from "../../engine/Engine.js"
-import SelectionController from "./SelectionController.js";
+import StaticSlectionController from "./StaticSelectionController.js";
 
-class ConfirmButtonBehavior extends Engine.Base.Behavior {
+export default class ConfirmButtonBehavior extends Engine.Base.Behavior {
     rectangle;
-    controller;
 
     start() {
         this.rectangle = this.gameObject.getComponent(Engine.Components.RectangleComponent);
-        this.controller = this.gameObject.getComponent(SelectionController);
     }
 
     update() {
@@ -18,7 +16,7 @@ class ConfirmButtonBehavior extends Engine.Base.Behavior {
         if (this.inBounds(mouseX, mouseY)){
             this.rectangle.highlight = true;
             if (clicked){
-                this.controller.sendMove();
+                StaticSlectionController.sendMove();
             }
         }
         else {
@@ -30,5 +28,3 @@ class ConfirmButtonBehavior extends Engine.Base.Behavior {
         return(x > this.gameObject.x - this.rectangle.width / 2 && x < this.gameObject.x + this.rectangle.width / 2 && y > this.gameObject.y - this.rectangle.height / 2 && y < this.gameObject.y + this.rectangle.height / 2);
     }
 }
-
-export default ConfirmButtonBehavior;

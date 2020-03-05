@@ -4,26 +4,74 @@ import Tile from "./Tile.js";
 import Unit from "./Unit.js";
 
 export default class Board extends Engine.Base.GameObject {
+    behavior;
+    tileh;
+    tilew;
     constructor(tileMap, unitMap, width, height) {
         super();
 
-        let behavior = new GameBehaviors.BoardBehavior();
-        this.addComponent(behavior);
+        this.behavior = new GameBehaviors.BoardBehavior();
+        this.addComponent(this.behavior);
 
         let maph = tileMap.length;
         let mapw = tileMap[0].length;
-        let tilew = width / mapw;
-        let tileh = height / maph;
-        let unitw = Math.min(tilew, tileh) * 0.8;
+        this.tilew = width / mapw;
+        this.tileh = height / maph;
+        let unitw = Math.min(this.tilew, this.tileh) * 0.8;
 
         for (let y = 0; y < maph; y++) {
             for (let x = 0; x < mapw; x++) {
-                let tile = new Tile(x*tilew + tilew/2, y*tileh + tileh/2, tilew, tileh, tileMap[y][x]);
-                this.children.push(tile);
-                let unit = new Unit(x*tilew + tilew/2, y*tileh + tileh/2, unitw, unitMap)
-                this.behavior.tiles[x][y] = tile;
-                this.behavior.units[x][y] = unit;
+                let tile = new Tile(x * this.tilew + this.tilew / 2, y * this.tileh + this.tileh / 2, this.tilew, this.tileh, tileMap[y][x], x, y);
+                this.addChild(tile);
+                if (this.behavior.tiles[x]) {
+                    this.behavior.tiles[x][y] = tile;
+                }
+                else {
+                    this.behavior.tiles[x] = [];
+                    this.behavior.tiles[x][y] = tile;
+                }
+                if (unitMap[x]) {
+                    if (unitMap[x][y]) {
+                        let unit = new Unit(x * this.tilew + this.tilew / 2, y * this.tileh + this.tileh / 2, unitw, unitMap[x][y].friendly, unitMap[x][y].type, x, y)
+                        this.addChild(unit);
+                        if (this.behavior.units[x]) {
+                            this.behavior.units[x][y] = unit;
+                        }
+                        else {
+                            this.behavior.units[x] = [];
+                            this.behavior.units[x][y] = unit;
+                        }
+                    }
+                }
             }
         }
+    }
+    getUnit(x, y) {
+        if (this.behavior.units[x]) {
+            return this.behavior.units[x][y];
+        }
+        return -1;
+    }
+    moveUnit(x1, y1, x2, y2) {
+        let unit = this.getUnit(x1, y1);
+        if (this.behavior.units[x1]) {
+            this.behavior.units[x1][y1] = null;
+        }
+        if (this.behavior.units[x2]) {
+            this.behavior.units[x2][y2] = unit;
+        }
+        else {
+            this.behavior.units[x2] = [];
+            this.behavior.units[x2][y2] = unit;
+        }
+        console.log(unit);
+        unit.x = x2 * this.tilew + this.tilew / 2
+        unit.y = y2 * this.tileh + this.tileh / 2
+        console.log(unit);
+    }
+    killUnit(unit){
+        let index = this.children.indexOf(unit);
+        console.log(index);
+        this.children.splice(index, 1);
     }
 }

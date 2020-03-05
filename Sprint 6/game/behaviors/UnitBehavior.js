@@ -3,8 +3,12 @@ import BoardController from "./BoardController.js";
 
 class UnitBehavior extends Engine.Base.Behavior {
     friendly;
-    constructor(friendly) {
+    x;
+    y;
+    constructor(x, y, friendly) {
         super();
+        this.x = x;
+        this.y = y;
         this.friendly = friendly;
     }
     start() {

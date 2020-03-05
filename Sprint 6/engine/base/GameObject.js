@@ -6,6 +6,7 @@ export default class GameObject extends NameableParent {
     scaleY;
     rotation;
     components = [];
+    parent;
 
     constructor(x = 0, y = 0, scaleX = 1, scaleY = 1, rotation = 0) {
         super();

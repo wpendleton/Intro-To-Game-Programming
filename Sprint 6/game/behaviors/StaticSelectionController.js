@@ -29,7 +29,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             return;
         }
         if (this.move) {
-            let unit = tile.getUnit();
+            let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
             if (unit) {
                 if (unit.friendly == 0) {
                     //TODO : Verify Attack Range
@@ -39,7 +39,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             return;
         }
         if (this.source) {
-            let unit = tile.getUnit();
+            let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
             if (unit) {
                 if (unit.friendly == 0) {
                     //TODO: Verify Attack Range;
@@ -53,7 +53,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
 
             return;
         }
-        let unit = tile.getUnit();
+        let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         if (unit) {
             if (unit.friendly == 1) {
                 this.selectSource(tile);
@@ -103,15 +103,11 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
 
     static sendMove() {
         if (this.source && this.move) {
-            let unit = this.source.getUnit();
-            this.source.setUnit(null);//TODO: fix this
-            this.move.setUnit(unit);//this
-            this.move.unit.setTile(this.move.x, this.move.y);//this
+            this.source.gameObject.parent.moveUnit(this.source.x, this.source.y, this.move.x, this.move.y);
         }
         if (this.source && this.attack) {
-            let unit = this.attack.getUnit();
-            SceneManager.currentScene.deleteObject(unit.gameObject); //TODO: Apply damage instead
-            this.attack.setUnit(null);//TODO fix this
+            let unit = this.attack.gameObject.parent.getUnit(this.attack.x, this.attack.y);
+            unit.parent.killUnit(unit); //TODO: Apply damage instead
         }
         this.deselectSource();
     }

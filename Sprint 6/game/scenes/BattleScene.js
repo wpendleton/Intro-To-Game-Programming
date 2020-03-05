@@ -36,16 +36,14 @@ export default class BattleScene extends Engine.Base.Scene {
             
         }
 
-        board = new GameObjects.Board(tileMap, unitMap, canvwidth * 3 / 4, canvheight * 3 / 4);
+        let board = new GameObjects.Board(tileMap, unitMap, canvwidth * 3 / 4, canvheight * 3 / 4);
+        this.addChild(board);
 
-        let sc = new GameBehaviors.SelectionController();
-
-        let confirmButton = new Engine.Base.GameObject(25, mapsh + tileh, 1, 1, 0);
-        confirmButton.addComponent(sc);
-        confirmButton.addComponent(new Engine.Components.RectangleComponent(tilew * 5, tileh, "red", "black"));
+        let confirmButton = new Engine.Base.GameObject(25, canvheight * 4 / 5, 1, 1, 0);
+        confirmButton.addComponent(new Engine.Components.RectangleComponent(300, 75, "red", "black"));
         confirmButton.addComponent(new Engine.Components.TextComponent("Confirm", "30pt Times", "black"));
         confirmButton.addComponent(new GameBehaviors.ConfirmButtonBehavior());
-        this.children.push(confirmButton);
+        this.addChild(confirmButton);
 
     }
 }

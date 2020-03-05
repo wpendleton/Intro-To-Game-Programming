@@ -2,11 +2,11 @@ import Engine from "../../engine/Engine.js";
 import TileBehavior from "../behaviors/TileBehavior.js";
 
 export default class Tile extends Engine.Base.GameObject{
-    constructor(x, y, w, h, type){
+    constructor(x, y, w, h, type, xi, yi){
         super(x, y);
         let rectangle = new Engine.Components.RectangleComponent(w, h, this.getFill(type), "black");
         this.addComponent(rectangle);
-        this.addComponent(new TileBehavior());
+        this.addComponent(new TileBehavior(xi, yi, type));
     }
 
     getFill(type) {
