@@ -22,13 +22,13 @@ class TileBehavior extends Engine.Base.Behavior {
         let clicked = Engine.Base.Input.getMouseButtonUp(0);
 
         if (this.inBounds(mouseX, mouseY)){
-            this.rectangle.highlight = true;
+            this.rectangle.hovered = true;
             if (clicked){
                 StaticSelectionController.selectionHandler(this);
             }
         }
         else {
-            this.rectangle.highlight = false;
+            this.rectangle.hovered = false;
         }
     }
     inBounds(x, y) {

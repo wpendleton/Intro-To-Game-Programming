@@ -30,6 +30,10 @@ export default class Board extends Engine.Base.GameObject {
                     this.behavior.tiles[x] = [];
                     this.behavior.tiles[x][y] = tile;
                 }
+            }
+        }
+        for (let y = 0; y < maph; y++) {
+            for (let x = 0; x < mapw; x++) {
                 if (unitMap[x]) {
                     if (unitMap[x][y]) {
                         let unit = new Unit(x * this.tilew + this.tilew / 2, y * this.tileh + this.tileh / 2, unitw, unitMap[x][y].friendly, unitMap[x][y].type, x, y)
@@ -48,12 +52,16 @@ export default class Board extends Engine.Base.GameObject {
     }
     getUnit(x, y) {
         if (this.behavior.units[x]) {
-            return this.behavior.units[x][y];
+            if (this.behavior.units[x][y]){
+                return this.behavior.units[x][y];
+            }
         }
         return -1;
     }
     moveUnit(x1, y1, x2, y2) {
         let unit = this.getUnit(x1, y1);
+        unit.x = x2 * this.tilew + this.tilew / 2
+        unit.y = y2 * this.tileh + this.tileh / 2
         if (this.behavior.units[x1]) {
             this.behavior.units[x1][y1] = null;
         }
@@ -64,14 +72,13 @@ export default class Board extends Engine.Base.GameObject {
             this.behavior.units[x2] = [];
             this.behavior.units[x2][y2] = unit;
         }
-        console.log(unit);
-        unit.x = x2 * this.tilew + this.tilew / 2
-        unit.y = y2 * this.tileh + this.tileh / 2
-        console.log(unit);
     }
-    killUnit(unit){
+    killUnit(x, y){
+        let unit = this.getUnit(x, y);
         let index = this.children.indexOf(unit);
-        console.log(index);
         this.children.splice(index, 1);
+        if (this.behavior.units[x]) {
+            this.behavior.units[x][y] = null;
+        }
     }
 }

@@ -8,14 +8,16 @@ export default class RectangleComponent extends Base.Component {
     stroke;
     highlight;
     lowlight;
+    texture;
     constructor(width, height, fill, stroke) {
         super();
         this.width = width;
         this.height = height;
         this.fill = fill;
         this.stroke = stroke;
-        this.highlight = false;
-        this.lowlight = false;
+        this.hovered = false;
+        this.highlight = null;
+        this.texture = null;
     }
     draw(ctx) {
         ctx.save();
@@ -25,16 +27,24 @@ export default class RectangleComponent extends Base.Component {
         ctx.fillRect(0, 0, this.width, this.height);
         ctx.strokeRect(0, 0, this.width, this.height);
         if (this.highlight) {
-            ctx.fillStyle = "rgba(255,255,255,0.5)";
+            ctx.fillStyle = this.highlight;
             ctx.fillRect(0, 0, this.width, this.height);
         }
-        if (this.lowlight) {
-            ctx.fillStyle = "rgba(0,0,0,0.5)";
+        if (this.texture) {
+            ctx.drawImage(this.texture, 0, 0, this.width, this.height);
+        }
+        if (this.hovered) {
+            ctx.fillStyle = "rgba(255,255,255,0.5)";
             ctx.fillRect(0, 0, this.width, this.height);
         }
         ctx.restore();
     }
     update() {
         
+    }
+    setTexture(filename){
+        let img = new Image();
+        img.src = filename;
+        this.texture = img;
     }
 }

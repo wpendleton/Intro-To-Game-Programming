@@ -7,7 +7,7 @@ export default class Unit extends Engine.Base.GameObject{
         super(x, y);
         let rectangle = new Engine.Components.RectangleComponent(w, w, this.getFill(friendly), "black");
         this.addComponent(rectangle);
-        this.behavior = new UnitBehavior(xi, yi, friendly)
+        this.behavior = new UnitBehavior(xi, yi, friendly, type)
         this.addComponent(this.behavior);
     }
 

@@ -1,10 +1,14 @@
 import Engine from "../../engine/Engine.js"
-import SceneManager from "../SceneManager.js"
 
 export default class StaticSelectionController extends Engine.Base.Behavior {
     static source = null;
     static move = null;
     static attack = null;
+    static inspect = null;
+
+    static selectedhighlight = "rgba(255,255,0,0.5)";
+    static movementhighlight = "rgba(0,0,255,0.4)";
+    static attackhighlight = "rgba(255,0,0,0.4)";
 
     static selectionHandler(tile) {
         if (tile == this.source) {
@@ -16,15 +20,15 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             return;
         }
         if (tile == this.attack) {
-            if (this.move == this.source){
+            if (this.move == this.source) {
                 this.deselectMove();
             }
-            else{
+            else {
                 this.deselectAttack();
             }
             return;
         }
-        
+
         if (this.attack) {
             return;
         }
@@ -32,54 +36,72 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
             if (unit) {
                 if (unit.friendly == 0) {
-                    //TODO : Verify Attack Range
-                    this.selectAttack(tile);
+                    let distX = Math.abs(this.move.x - tile.x);
+                    let distY = Math.abs(this.move.y - tile.y);
+                    let range = tile.gameObject.parent.getUnit(this.source.x, this.source.y).behavior.attackrange;
+                    if (distX <= range && distY <= range) {
+                        this.selectAttack(tile);
+                    }
                 }
             }
-            return;
         }
-        if (this.source) {
+        else if (this.source) {
             let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
             if (unit) {
                 if (unit.friendly == 0) {
-                    //TODO: Verify Attack Range;
-                    this.selectMove(this.source);
-                    this.selectAttack(tile);
+                    let distX = Math.abs(this.source.x - tile.x);
+                    let distY = Math.abs(this.source.y - tile.y);
+                    let range = tile.gameObject.parent.getUnit(this.source.x, this.source.y).behavior.attackrange;
+                    if (distX <= range && distY <= range) {
+                        this.selectMove(this.source);
+                        this.selectAttack(tile);
+                    }
                 }
             } else if (tile.type == "P" || tile.type == "F") {
                 //TODO: Verify Movement Range
                 this.selectMove(tile);
             }
-
-            return;
         }
-        let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
-        if (unit) {
-            if (unit.friendly == 1) {
-                this.selectSource(tile);
+        else {
+            let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
+            if (unit) {
+                if (unit.friendly == 1) {
+                    this.selectSource(tile);
+                }
+                else {
+                    this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
+                }
             }
         }
-
+        //TODO: call inspection panel
+        console.log(this.inspect);
     }
     static selectSource(tile) {
+        this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         this.source = tile;
-        this.source.rectangle.lowlight = true;
+        this.source.rectangle.highlight = this.selectedhighlight;
+        //TODO: Display movement range of unit
+        //Find all valid movemnt square
+        //Loop over squares and set their highlights
     }
 
     static selectMove(tile) {
         this.move = tile;
-        this.move.rectangle.lowlight = true;
+        this.move.rectangle.highlight = this.movementhighlight;
+        //TODO: Display attack range of unit
     }
 
     static selectAttack(tile) {
+        this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         this.attack = tile;
-        this.attack.rectangle.lowlight = true;
+        this.attack.rectangle.highlight = this.attackhighlight;
     }
 
     static deselectSource() {
+        this.inspect = null;
         this.deselectMove();
         if (this.source) {
-            this.source.rectangle.lowlight = false;
+            this.source.rectangle.highlight = null;
             this.source = null;
         }
     }
@@ -87,27 +109,28 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
     static deselectMove() {
         this.deselectAttack();
         if (this.move) {
-            if (this.move != this.source){
-                this.move.rectangle.lowlight = false;
+            if (this.move != this.source) {
+                this.move.rectangle.highlight = null;
             }
             this.move = null;
         }
     }
 
     static deselectAttack() {
+        this.inspect = this.source.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         if (this.attack) {
-            this.attack.rectangle.lowlight = false;
+            this.attack.rectangle.highlight = null;
             this.attack = null;
         }
     }
 
     static sendMove() {
+        this.inspect = null;
         if (this.source && this.move) {
             this.source.gameObject.parent.moveUnit(this.source.x, this.source.y, this.move.x, this.move.y);
         }
         if (this.source && this.attack) {
-            let unit = this.attack.gameObject.parent.getUnit(this.attack.x, this.attack.y);
-            unit.parent.killUnit(unit); //TODO: Apply damage instead
+            this.source.gameObject.parent.killUnit(this.attack.x, this.attack.y); //TODO: Apply damage instead
         }
         this.deselectSource();
     }
