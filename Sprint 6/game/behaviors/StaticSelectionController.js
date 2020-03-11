@@ -6,7 +6,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
     static attack = null;
     static inspect = null;
 
-    static selectedhighlight = "rgba(255,255,0,0.5)";
+    static sourcehighlight = "rgba(255,255,0,0.5)";
     static movementhighlight = "rgba(0,0,255,0.4)";
     static attackhighlight = "rgba(255,0,0,0.4)";
 
@@ -79,7 +79,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
     static selectSource(tile) {
         this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         this.source = tile;
-        this.source.rectangle.highlight = this.selectedhighlight;
+        this.source.rectangle.highlight = this.sourcehighlight;
         //TODO: Display movement range of unit
         //Find all valid movemnt square
         //Loop over squares and set their highlights
@@ -112,12 +112,15 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             if (this.move != this.source) {
                 this.move.rectangle.highlight = null;
             }
+            else (this.source.rectangle.highlight = this.sourcehighlight)
             this.move = null;
         }
     }
 
     static deselectAttack() {
-        this.inspect = this.source.gameObject.parent.getUnit(tile.x, tile.y).behavior;
+        if (this.source){
+            this.inspect = this.source.gameObject.parent.getUnit(this.source.x, this.source.y).behavior;
+        }
         if (this.attack) {
             this.attack.rectangle.highlight = null;
             this.attack = null;
