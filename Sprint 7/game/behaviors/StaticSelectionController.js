@@ -69,7 +69,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             let unit = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
             if (unit) {
                 if (unit.friendly == 1) {
-                    this.selectSource(tile);
+                    this.selectSource(tile, unit);
                 }
                 else {
                     this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
@@ -79,10 +79,13 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
         //TODO: call inspection panel
         this.infoPanel.updateValues(this.inspect.friendly, this.inspect.type, this.inspect.health, this.inspect.moverange, this.inspect.attackrange, this.inspect.damage);
     }
-    static selectSource(tile) {
+    static selectSource(tile, unit) {
         this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         this.source = tile;
         this.source.rectangle.highlight = this.sourcehighlight;
+        let moveable = tile.gameObject.parent.getTilesForMove(tile.x, tile.y, unit.moverange);
+        console.log(moveable);
+        moveable.forEach(i=>i.rectangle.highlight = this.movementhighlight);
         //TODO: Display movement range of unit
         //Find all valid movemnt square
         //Loop over squares and set their highlights

@@ -7,6 +7,7 @@ export default class Board extends Engine.Base.GameObject {
     behavior;
     tileh;
     tilew;
+    visited;
     constructor(tileMap, unitMap, width, height) {
         super();
 
@@ -80,5 +81,62 @@ export default class Board extends Engine.Base.GameObject {
         if (this.behavior.units[x]) {
             this.behavior.units[x][y] = null;
         }
+    }
+    getTilesForMove(sourcex, sourcey, moverange){
+        this.visited = [];
+        for (let i = 0; i < this.behavior.tiles.length; i++){
+            this.visited[i] = [];
+        }
+        let valid = this.floodFill(sourcex, sourcey, moverange, new Array());
+        console.log(valid);
+        return valid;
+    }
+    floodFill(currentx, currenty, distance, tiles){
+        tiles.push(this.behavior.tiles[currentx][currenty]);
+        this.visited[currentx][currenty] = true;
+
+        if (distance <= 0){
+            return tiles;
+        }
+        
+        if (this.inBounds(currentx, currenty-1)){
+            if (this.isValid(currentx, currenty-1)){
+                tiles = this.floodFill(currentx, currenty-1, distance-1, tiles)
+            } else {
+                this.visited[currentx][currenty-1] = true;
+            }
+        }
+
+        if (this.inBounds(currentx+1, currenty)){
+            if (this.isValid(currentx+1, currenty)){
+                tiles = this.floodFill(currentx+1, currenty, distance-1, tiles)
+            } else {
+                this.visited[currentx+1][currenty] = true;
+            }
+        }
+
+        if (this.inBounds(currentx, currenty+1)){
+            if (this.isValid(currentx, currenty+1)){
+                tiles = this.floodFill(currentx, currenty+1, distance-1, tiles)
+            } else {
+                this.visited[currentx][currenty+1] = true;
+            }
+        }
+
+        if (this.inBounds(currentx-1, currenty)){
+            if (this.isValid(currentx-1, currenty)){
+                tiles = this.floodFill(currentx-1, currenty, distance-1, tiles)
+            } else {
+                this.visited[currentx-1][currenty] = true;
+            }
+        }
+
+        return tiles;
+    }
+    isValid(x, y){
+        return !this.visited[x][y];
+    }
+    inBounds(x, y){
+        return x >= 0 && x < this.behavior.tiles.length && y >= 0 && y < this.behavior.tiles[0].length;
     }
 }
