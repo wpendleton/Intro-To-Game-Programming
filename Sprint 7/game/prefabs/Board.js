@@ -7,7 +7,6 @@ export default class Board extends Engine.Base.GameObject {
     behavior;
     tileh;
     tilew;
-    visited;
     constructor(tileMap, unitMap, width, height) {
         super();
 
@@ -51,14 +50,16 @@ export default class Board extends Engine.Base.GameObject {
             }
         }
     }
+
     getUnit(x, y) {
         if (this.behavior.units[x]) {
-            if (this.behavior.units[x][y]){
+            if (this.behavior.units[x][y]) {
                 return this.behavior.units[x][y];
             }
         }
         return -1;
     }
+
     moveUnit(x1, y1, x2, y2) {
         let unit = this.getUnit(x1, y1);
         unit.x = x2 * this.tilew + this.tilew / 2
@@ -74,7 +75,8 @@ export default class Board extends Engine.Base.GameObject {
             this.behavior.units[x2][y2] = unit;
         }
     }
-    killUnit(x, y){
+
+    killUnit(x, y) {
         let unit = this.getUnit(x, y);
         let index = this.children.indexOf(unit);
         this.children.splice(index, 1);
@@ -82,61 +84,55 @@ export default class Board extends Engine.Base.GameObject {
             this.behavior.units[x][y] = null;
         }
     }
-    getTilesForMove(sourcex, sourcey, moverange){
-        this.visited = [];
-        for (let i = 0; i < this.behavior.tiles.length; i++){
-            this.visited[i] = [];
-        }
+
+    getTilesForMove(sourcex, sourcey, moverange) {
         let valid = this.floodFill(sourcex, sourcey, moverange, new Array());
-        console.log(valid);
         return valid;
     }
-    floodFill(currentx, currenty, distance, tiles){
-        tiles.push(this.behavior.tiles[currentx][currenty]);
-        this.visited[currentx][currenty] = true;
 
-        if (distance <= 0){
+    floodFill(currentx, currenty, distance, tiles) {
+        if (!tiles.includes(this.behavior.tiles[currentx][currenty])) {
+            tiles.push(this.behavior.tiles[currentx][currenty]);
+        }
+
+        if (distance <= 0) {
             return tiles;
         }
+
+        if (this.inBounds(currentx, currenty - 1) && this.isValid(currentx, currenty - 1)) {
+            tiles = this.floodFill(currentx, currenty - 1, distance - 1, tiles)
+        }
+
+        if (this.inBounds(currentx + 1, currenty) && this.isValid(currentx + 1, currenty)) {
+            tiles = this.floodFill(currentx + 1, currenty, distance - 1, tiles)
+        }
+
+        if (this.inBounds(currentx, currenty + 1) && this.isValid(currentx, currenty + 1)) {
+            tiles = this.floodFill(currentx, currenty + 1, distance - 1, tiles)
+        }
+
+        if (this.inBounds(currentx - 1, currenty) && this.isValid(currentx - 1, currenty)) {
+            tiles = this.floodFill(currentx - 1, currenty, distance - 1, tiles)
+        }
         
-        if (this.inBounds(currentx, currenty-1)){
-            if (this.isValid(currentx, currenty-1)){
-                tiles = this.floodFill(currentx, currenty-1, distance-1, tiles)
-            } else {
-                this.visited[currentx][currenty-1] = true;
-            }
-        }
-
-        if (this.inBounds(currentx+1, currenty)){
-            if (this.isValid(currentx+1, currenty)){
-                tiles = this.floodFill(currentx+1, currenty, distance-1, tiles)
-            } else {
-                this.visited[currentx+1][currenty] = true;
-            }
-        }
-
-        if (this.inBounds(currentx, currenty+1)){
-            if (this.isValid(currentx, currenty+1)){
-                tiles = this.floodFill(currentx, currenty+1, distance-1, tiles)
-            } else {
-                this.visited[currentx][currenty+1] = true;
-            }
-        }
-
-        if (this.inBounds(currentx-1, currenty)){
-            if (this.isValid(currentx-1, currenty)){
-                tiles = this.floodFill(currentx-1, currenty, distance-1, tiles)
-            } else {
-                this.visited[currentx-1][currenty] = true;
-            }
-        }
-
         return tiles;
     }
-    isValid(x, y){
-        return !this.visited[x][y];
+
+    isValid(x, y) {
+        if (this.getUnit(x, y) != -1) {
+            return false;
+        }
+        let type = this.behavior.tiles[x][y].behavior.type;
+        if (type == "W") {
+            return false;
+        }
+        if (type == "M") {
+            return false;
+        }
+        return true;
     }
-    inBounds(x, y){
+
+    inBounds(x, y) {
         return x >= 0 && x < this.behavior.tiles.length && y >= 0 && y < this.behavior.tiles[0].length;
     }
 }

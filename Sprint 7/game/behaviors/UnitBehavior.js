@@ -27,28 +27,28 @@ class UnitBehavior extends Engine.Base.Behavior {
         switch(type){
             case "A"://Archer
                 this.health = 15;
-                this.moverange = 1;
+                this.moverange = 2;
                 this.attackrange = 3;
                 this.damage = 5;
                 this.gameObject.getComponent(RectangleComponent).setTexture("./game/assets/archer.png");
                 break;
             case "M"://Mage
                 this.health = 20;
-                this.moverange = 2;
+                this.moverange = 3;
                 this.attackrange = 2;
                 this.damage = 10;
                 this.gameObject.getComponent(RectangleComponent).setTexture("./game/assets/mage.png");
                 break;
             case "R"://Rogue
                 this.health = 25;
-                this.moverange = 3;
+                this.moverange = 5;
                 this.attackrange = 1;
                 this.damage = 15;
                 this.gameObject.getComponent(RectangleComponent).setTexture("./game/assets/rogue.png");
                 break;
             case "W"://Warrior
                 this.health = 40;
-                this.moverange = 2;
+                this.moverange = 3;
                 this.attackrange = 1;
                 this.damage = 10;
                 this.gameObject.getComponent(RectangleComponent).setTexture("./game/assets/warrior.png");

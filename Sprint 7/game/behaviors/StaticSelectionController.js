@@ -5,6 +5,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
     static move = null;
     static attack = null;
     static inspect = null;
+    static movecandidates = null;
 
     static sourcehighlight = "rgba(255,255,0,0.5)";
     static movementhighlight = "rgba(0,0,255,0.4)";
@@ -60,8 +61,7 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
                         this.selectAttack(tile);
                     }
                 }
-            } else if (tile.type == "P" || tile.type == "F") {
-                //TODO: Verify Movement Range
+            } else if (this.movecandidates.includes(tile.gameObject)) {
                 this.selectMove(tile);
             }
         }
@@ -77,22 +77,22 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
             }
         }
         //TODO: call inspection panel
-        this.infoPanel.updateValues(this.inspect.friendly, this.inspect.type, this.inspect.health, this.inspect.moverange, this.inspect.attackrange, this.inspect.damage);
+        if (this.inspect){
+            this.infoPanel.updateValues(this.inspect.friendly, this.inspect.type, this.inspect.health, this.inspect.moverange, this.inspect.attackrange, this.inspect.damage);
+        }
     }
     static selectSource(tile, unit) {
         this.inspect = tile.gameObject.parent.getUnit(tile.x, tile.y).behavior;
         this.source = tile;
         this.source.rectangle.highlight = this.sourcehighlight;
-        let moveable = tile.gameObject.parent.getTilesForMove(tile.x, tile.y, unit.moverange);
-        console.log(moveable);
-        moveable.forEach(i=>i.rectangle.highlight = this.movementhighlight);
-        //TODO: Display movement range of unit
-        //Find all valid movemnt square
-        //Loop over squares and set their highlights
+        this.movecandidates = tile.gameObject.parent.getTilesForMove(tile.x, tile.y, unit.moverange);
+        this.movecandidates.forEach(i=>i.rectangle.highlight = this.movementhighlight);
     }
 
     static selectMove(tile) {
         this.confirmbutton.rectangle.highlight = this.attackhighlight;
+        this.movecandidates.forEach(i=>i.rectangle.highlight = null);
+        this.movecandidates = null;
         this.move = tile;
         this.move.rectangle.highlight = this.movementhighlight;
         //TODO: Display attack range of unit
@@ -105,12 +105,16 @@ export default class StaticSelectionController extends Engine.Base.Behavior {
     }
 
     static deselectSource() {
-        this.inspect = null;
         this.deselectMove();
         if (this.source) {
             this.source.rectangle.highlight = null;
             this.source = null;
         }
+        if (this.movecandidates){
+            this.movecandidates.forEach(i=>i.rectangle.highlight = null);
+            this.movecandidates = null;
+        }
+        this.inspect = null;
     }
 
     static deselectMove() {
